@@ -31,7 +31,7 @@ var db = mongoose.connection;
 
 // Database configuration
 var databaseUrl = "newyorktimes";
-var collections = ["nytArticles"];
+var collections = ["Article", "Note"];
 
 db.on("error", function(error) {
   console.log("Database Error:", error);
@@ -44,7 +44,7 @@ db.once("open", function() {
 // Main route
 app.get("/", function(req, res) {
 //   res.send("Hello world");
-  db.nytArticles.find({}, function(error, data) {
+  db.Article.find({}, function(error, data) {
     // Log any errors if the server encounters one
     if (error) {
         console.log(error);
@@ -72,7 +72,7 @@ app.get("/scrape", function(req, res) {
         // console.log(link);
 
             // Save these results in an object that we'll push into the results array we defined earlier
-            db.nytArticles.create({
+            db.Article.create({
                 title: title,
                 link: link,
                 img: img,
