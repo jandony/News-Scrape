@@ -8,6 +8,10 @@ var logger = require("morgan");
 var axios = require("axios");
 var cheerio = require("cheerio");
 
+// Require models
+var Article = require("./models/Article.js");
+var Note = require("./models/Note.js");
+
 // Initialize Express
 var app = express();
 
@@ -16,6 +20,9 @@ app.use(logger("dev"));
 // Parse application body as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Make public
+app.use(express.static("public"));
 
 // Set Handlebars as the view engine
 var exphbs = require('express-handlebars');
@@ -29,10 +36,6 @@ mongoose.connect(MONGODB_URI);
 
 var db = mongoose.connection;
 
-// Database configuration
-var databaseUrl = "newyorktimes";
-var collections = ["Article", "Note"];
-
 db.on("error", function(error) {
   console.log("Database Error:", error);
 });
@@ -41,21 +44,14 @@ db.once("open", function() {
     console.log("Mongoose connection successful.");
 })
 
-// Main route
+// GET request to render Handlebar homepage to get all Articles
 app.get("/", function(req, res) {
-//   res.send("Hello world");
-  db.Article.find({}, function(error, data) {
-    // Log any errors if the server encounters one
-    if (error) {
-        console.log(error);
-    }
-    // Otherwise, send the result of this query to the browser
-    else {
+    Article.find({}, function(error, data) {
         var hbsObject = {
-            burgers: data
-          };
-        res.render("main", hbsObject);
-    }
+            article: data
+        };
+        res.render("home", hbsObject);
+        console.log(hbsObject);
     });
 });
 
@@ -71,8 +67,8 @@ app.get("/scrape", function(req, res) {
 
         // console.log(link);
 
-            // Save these results in an object that we'll push into the results array we defined earlier
-            db.Article.create({
+            // Save these results in an object that we'll create into the Article models table
+            Article.create({
                 title: title,
                 link: link,
                 img: img,
@@ -83,17 +79,9 @@ app.get("/scrape", function(req, res) {
                 console.log(err);
             });
         });
-        res.send("Scrape complete.");
-    });
-});
 
-// GET request to render Handlebar homepage to get all Articles
-app.get("/", function(req, res) {
-    db.Article.find({}, function(error, data) {
-        var hbsObject = {
-            article: data
-        };
-        res.render("home", hbsObject);
+        var htmlBtn = $("<a href='/'>Home Screen</a>")
+        res.send("Scraped Successfully! Please go back to " + htmlBtn);
     });
 });
 
@@ -105,7 +93,7 @@ app.get("/saved", function(req, res) {
         };
         res.render("saved", hbsObject);
     });
-});
+});``
 
 // GET all articles from Mongoose
 app.get("/articles", function(req, res) {
