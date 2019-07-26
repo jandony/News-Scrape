@@ -1,12 +1,12 @@
 <div class="container">
-    <h1 class="text-center">Listed NYT Articles...</h1>
+    <h1 class="text-center">Saved NYT Articles...</h1>
 
     <div class="col-md-12">
         {{#if article}}
             {{#each article}}
             <div class="card panel">
 
-                <div class="row article">
+                <div class="row">
                     <div class="col-sm-12 col-lg-6 pr-lg-0">
                         <img src="{{this.img}}" style="width: 100%;">
                     </div>
@@ -18,7 +18,9 @@
                             <p> {{this.summary}}</p>
                             <a href={{this.link}} target="_blank">{{this.link}}</a>
                             <br><br>
-                            <button type="button" class="btn btn-info save" data-id={{this._id}}>Save Article</button>
+                            <a href="/saved">
+                            <button type="button" class="btn btn-info delete" data-id={{this._id}}>Delete Article</button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -28,10 +30,9 @@
         {{else}}
         <div class="card panel">
             <div class="card-header">
-                <h4>Uh Oh. Looks like we don't have any new articles...</h4>
             </div>
             <div class="card-body">
-                <p>Hint: Click the "Scrape New Articles" to view New York Time articles!</p>
+                <p class="text-center">Uh Oh. Looks like we don't have any saved articles...</p>
             </div>
         </div>
         {{/if}}

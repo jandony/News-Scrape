@@ -46,7 +46,7 @@ db.once("open", function() {
 
 // GET request to render Handlebar homepage to get all Articles
 app.get("/", function(req, res) {
-    Article.find({}, function(error, data) {
+    Article.find({ saved: "false" }, function(error, data) {
         var hbsObject = {
             article: data
         };
@@ -60,7 +60,7 @@ app.get("/scrape", function(req, res) {
     var $ = cheerio.load(response.data);
 
         $("article").each(function(i, element) {
-        var title = $(element).children().text();
+        var title = $(element).find("h2").text();
         var link = $(element).find("a").attr("href");
         var img = $(element).parent().find("img").attr("src");
         var summary = $(element).find("p").text();
@@ -85,19 +85,28 @@ app.get("/scrape", function(req, res) {
     });
 });
 
+app.get("/clear", function(req, res) {
+    Article.remove({}).then(function(removed) { 
+        res.json(removed);
+    });
+    res.redirect("/");
+});
+
+
 // GET request to render Hanblebars saved page and saved Articles
 app.get("/saved", function(req, res) {
-    db.Article.find({ "saved" : true }).populate("notes").then(function(error, data) {
+    Article.find({ saved: "true" }, function(error, data) {
         var hbsObject = {
             article: data
         };
         res.render("saved", hbsObject);
+        console.log(hbsObject);
     });
-});``
+});
 
 // GET all articles from Mongoose
 app.get("/articles", function(req, res) {
-    db.Article.find({})
+    Article.find({})
     .then(function(data) {
         res.json(data);
     })
@@ -108,7 +117,7 @@ app.get("/articles", function(req, res) {
 
 // GET article by object id
 app.get("/articles/:id", function(req, res) {
-    db.Article.findOne({ _id: req.params.id })
+    Article.findOne({ _id: req.params.id })
     .populate("notes")
     .then(function(data) {
         res.json(data);
@@ -123,7 +132,7 @@ app.get("/articles/:id", function(req, res) {
 
 // POST article
 app.post("/articles/save/:id", function (req, res) {
-    db.Article.findOneAndUpdate({ _id: req.params.id }, { "saved" : true }, { new: true })
+    Article.findOneAndUpdate({ _id: req.params.id }, { "saved" : true }, { new: true })
     .then(function(data) {
         res.json(data);
     }).catch(function(err) {
@@ -133,7 +142,7 @@ app.post("/articles/save/:id", function (req, res) {
 
 // DELETE an article
 app.post("/articles/delete/:id", function (req, res) {
-    db.Article.findOneAndUpdate({ _id: req.params.id }, { "saved" : false , "notes" : [] })
+    Article.findOneAndUpdate({ _id: req.params.id }, { "saved" : false , "notes" : [] })
     .then(function(data) {
         res.json(data);
     }).catch(function(err) {
