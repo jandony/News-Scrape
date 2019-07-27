@@ -24,7 +24,7 @@ $(".delete").on("click", function() {
     $.ajax({
         method: "POST",
         url: "/articles/delete/" + thisId,
-        data: { "saved" : false }
+        data: { saved: false }
     }).then(function(data) {
         console.log(data);
     });
@@ -32,6 +32,24 @@ $(".delete").on("click", function() {
 });
 
 // Handle Save Note button
+$("#save-note").on("click", function() {
+    var thisId = $(this).attr("data-id");
+    // console.log(thisId);
 
+    var noteText = $("#note-textarea").val();
+    console.log(noteText);
+
+    $.ajax({
+        method: "POST",
+        url: "/notes/save/" + thisId,
+        data: { 
+            body: noteText
+        }
+    }).then(function(data) {
+        console.log(data);
+    });
+    $("#note-textarea").val("");
+    // console.log(tryThis);
+});
 
 // Handle Delete Note button

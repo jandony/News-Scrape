@@ -35,7 +35,9 @@
                             <div id="article-notes" class="bg-light pb-5 mt-3">
                             <hr>
                             <h4>All Notes:</h4>
-                            <div id="notes"></div>
+                            <div id="notes">
+                                {{this.notes}}
+                            </div>
                         </div>
                         </div>
                         <!-- Modal -->
@@ -51,14 +53,14 @@
                             <div class="modal-body">
                                 <form>
                                     <div class="form-group">
-                                        <label for="exampleFormControlTextarea1">Your Note goes below:</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                        <label for="note-textarea">Your Note goes below:</label>
+                                        <textarea class="form-control" id="note-textarea" rows="3"></textarea>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button id="save-note" data-id={{this._id}} type="button" class="btn btn-primary">Save changes</button>
                             </div>
                             </div>
                         </div>

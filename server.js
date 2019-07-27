@@ -166,14 +166,17 @@ app.post("/notes/save/:id", function (req, res) {
     var newNote = new Note ({
         body: req.body.text,
         article: req.params.id
-    })
-
-    db.Note.create(newNote)
+    });
+    console.log(newNote);
+    
+    Note.create(req.body)
     .then(function(data) {
-        return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: {"notes": data } }, { new: true } );
+        console.log(data);
+        return Article.findOneAndUpdate({ _id: req.params.id }, { $push: {notes: data} }, { new: true } );
     })
     .then(function(data2) {
         res.json(data2);
+        alert("It worked!");
     }).catch(function(err) {
         res.json(err);
     });
@@ -181,7 +184,7 @@ app.post("/notes/save/:id", function (req, res) {
 
 // DELETE a note
 app.delete("/notes/delete/:id/:article_id", function (req, res) {
-    Article.findOneAndUpdate({ _id: req.params.article_id}, { $pull: {"notes": req.params.note_id} })
+    Article.findOneAndUpdate({ _id: req.params.article_id}, { $pull: {notes: req.params.note_id} })
     .then(function(data) {
         res.json(data);
     }).catch(function(err) {

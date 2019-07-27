@@ -8,6 +8,7 @@ var Schema = mongoose.Schema;
 var NoteSchema = new Schema ({
     body: {
         type: String,
+        trim: true
     },
     article: {
         type: Schema.Types.ObjectId,
