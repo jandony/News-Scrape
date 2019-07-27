@@ -1,13 +1,9 @@
-// Require models
-// var Article = require("./models/Article.js");
-// var Note = require("./models/Note.js");
-
 // Handle Scrape button
 
 // Handle Save Article button
 $(".save").on("click", function() {
     var thisId = $(this).attr("data-id");
-    console.log(thisId);
+    // console.log(thisId);
 
     $.ajax({
         method: "POST",
@@ -16,6 +12,8 @@ $(".save").on("click", function() {
     }).then(function(data) {
         console.log(data);
     });
+    $(this).parent().parent().parent().hide();
+    // console.log(tryThis);
 });
 
 // Handle Clear Article button
@@ -30,8 +28,10 @@ $(".delete").on("click", function() {
     }).then(function(data) {
         console.log(data);
     });
+    $(this).parent().parent().parent().hide();
 });
 
 // Handle Save Note button
+
 
 // Handle Delete Note button

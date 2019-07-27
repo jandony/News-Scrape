@@ -104,6 +104,14 @@ app.get("/saved", function(req, res) {
     });
 });
 
+app.get("/saved/articles", function(req, res){
+  db.Article.find({saved: true}).then(function(articles){
+    res.json(articles);
+  }).catch(function(err){
+    res.json(err);
+  });
+});
+
 // GET all articles from Mongoose
 app.get("/articles", function(req, res) {
     Article.find({})
@@ -132,7 +140,7 @@ app.get("/articles/:id", function(req, res) {
 
 // POST article
 app.post("/articles/save/:id", function (req, res) {
-    Article.findOneAndUpdate({ _id: req.params.id }, { "saved" : true }, { new: true })
+    Article.findOneAndUpdate({ _id: req.params.id }, { $set: {"saved" : true} }, { new: true })
     .then(function(data) {
         res.json(data);
     }).catch(function(err) {
@@ -142,7 +150,7 @@ app.post("/articles/save/:id", function (req, res) {
 
 // DELETE an article
 app.post("/articles/delete/:id", function (req, res) {
-    Article.findOneAndUpdate({ _id: req.params.id }, { "saved" : false , "notes" : [] })
+    Article.findOneAndUpdate({ _id: req.params.id }, { $set: {"saved" : false} , "notes" : [] })
     .then(function(data) {
         res.json(data);
     }).catch(function(err) {
