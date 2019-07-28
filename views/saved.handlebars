@@ -16,15 +16,15 @@
             {{#each article}}
             <div class="card panel">
 
-                <div class="row">
-                    <div class="col-sm-12 col-lg-6 pr-lg-0 bg-dark p-0 pb-5">
-                        <img src="{{this.img}}" style="width: 100%;">
+                <div class="row m-0">
+                    <div class="col-sm-12 col-lg-6 pb-lg-5 p-0">
+                        <img class="w-100" src="{{this.img}}">
                     </div>
-                    <div class="col-sm-12 col-lg-6 pl-lg-0">
+                    <div class="col-sm-12 col-lg-6">
                         <div class="card-header bg-light text-dark">
                             <h4><b>{{this.title}}</b></h4>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body bg-secondary">
                             <h4>Summary:</h4>
                             <p>{{this.summary}}</p>
                             <a href="https://www.nytimes.com/{{this.link}}" target="_blank">{{this.link}}</a>
@@ -32,13 +32,6 @@
                             <button type="button" class="btn btn-danger ml-2 delete" data-id={{this._id}}>Delete from Saved</button>
                             <button type="button" class="btn btn-success ml-2 note" data-id={{this._id}} data-toggle="modal" data-target="#noteModal{{this._id}}">Create a Note</button>
                             
-                            <div id="article-notes" class="bg-light pb-5 mt-3">
-                            <hr>
-                            <h4>All Notes:</h4>
-                            <div id="notes">
-                                {{this.notes}}
-                            </div>
-                        </div>
                         </div>
                         <!-- Modal -->
                         <div class="modal fade" id="noteModal{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -66,6 +59,21 @@
                         </div>
                         </div>
                         
+                    </div>
+                </div>
+
+                <div class="row m-0 px-5 pt-5 pt-lg-0">
+                    <h4>All Notes:</h4><br/>
+                    <div id="notes" class=" w-100 p-2">
+                        {{#if this.notes}}
+                            {{#each this.notes}}
+                                <p class="text-primary m-0" style="font-size: 8pt">{{this._id}}</p>
+                                <p class="pl-3">{{this.body}}</p>
+                                <hr>
+                            {{/each}}
+                        {{else}}
+                            <p>No notes for this article.</p>
+                        {{/if}}
                     </div>
                 </div>
 

@@ -93,16 +93,19 @@ app.get("/clear", function(req, res) {
 });
 
 
-// GET request to render Hanblebars saved page and saved Articles
+// GET request to render Hanblebars saved page, saved Articles and Notes
 app.get("/saved", function(req, res) {
-    Article.find({ saved: "true" }, function(error, data) {
+    Article.find({ saved: "true" }).populate("notes")
+    .then(function(data) {
         var hbsObject = {
             article: data
         };
+        
         res.render("saved", hbsObject);
         console.log(hbsObject);
     });
 });
+
 
 app.get("/saved/articles", function(req, res){
   db.Article.find({saved: true}).then(function(articles){
@@ -125,8 +128,7 @@ app.get("/articles", function(req, res) {
 
 // GET article by object id
 app.get("/articles/:id", function(req, res) {
-    Article.findOne({ _id: req.params.id })
-    .populate("notes")
+    Article.findOne({ _id: req.params.id }).populate("notes")
     .then(function(data) {
         res.json(data);
     }).catch(function(err) {
