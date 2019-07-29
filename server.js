@@ -142,7 +142,7 @@ app.get("/articles/:id", function(req, res) {
 
 // POST article
 app.post("/articles/save/:id", function (req, res) {
-    Article.findOneAndUpdate({ _id: req.params.id }, { $set: {"saved" : true} }, { new: true })
+    Article.findOneAndUpdate({ _id: req.params.id }, { $set: {"saved": true} }, { new: true })
     .then(function(data) {
         res.json(data);
     }).catch(function(err) {
@@ -152,7 +152,7 @@ app.post("/articles/save/:id", function (req, res) {
 
 // DELETE an article
 app.post("/articles/delete/:id", function (req, res) {
-    Article.findOneAndUpdate({ _id: req.params.id }, { $set: {"saved" : false} , "notes" : [] })
+    Article.findOneAndUpdate({ _id: req.params.id }, { $set: {"saved": false} , "notes" : [] })
     .then(function(data) {
         res.json(data);
     }).catch(function(err) {
